@@ -3,23 +3,23 @@
 import * as vscode from 'vscode';
 
 
-let pasteAndIndent = () => {
-	let config = vscode.workspace.getConfiguration('pasteAndIndent');
-	let editor = vscode.window.activeTextEditor;
-	let start = editor.selection.start;
+const pasteAndIndent = () => {
+	const config = vscode.workspace.getConfiguration('pasteAndIndent');
+	const editor = vscode.window.activeTextEditor;
+	const start = editor.selection.start;
 	let offset = start.character;
-	let indentChar = editor.options.insertSpaces ? ' ' : '\t';
-	let startLine = editor.document.getText(new vscode.Selection(start.line, 0, start.line, start.character));
-	let startChar = startLine.search(/\S/);
+	const indentChar = editor.options.insertSpaces ? ' ' : '\t';
+	const startLine = editor.document.getText(new vscode.Selection(start.line, 0, start.line, start.character));
+	const startChar = startLine.search(/\S/);
 
 	if (startChar > -1) {
 		offset = startChar;
 	}
 	vscode.commands.executeCommand('editor.action.clipboardPasteAction').then(() => {
-		let end = editor.selection.end;
-		let selectionToIndent = new vscode.Selection(start.line, start.character, end.line, end.character);
-		let selectedText = editor.document.getText(selectionToIndent);
-		let leadingSpaces = []; // The amount of leading space the line has
+		const end = editor.selection.end;
+		const selectionToIndent = new vscode.Selection(start.line, start.character, end.line, end.character);
+		const selectedText = editor.document.getText(selectionToIndent);
+		const leadingSpaces = []; // The amount of leading space the line has
 		let xmin; // The minimum amount of leading space amongst the non-empty lines
 		let linesToIndent = selectedText.split('\n');
 
@@ -49,8 +49,8 @@ let pasteAndIndent = () => {
 			return; // Skip indentation
 		}
 		linesToIndent = linesToIndent.map((line, index) => {
-			let x = leadingSpaces[index];
-			let chars = (index === 0 || x === -1) ? '' : indentChar.repeat(x - xmin + offset);
+			const x = leadingSpaces[index];
+			const chars = (index === 0 || x === -1) ? '' : indentChar.repeat(x - xmin + offset);
 
 			return line.replace(/^\s*/, chars);
 		});
