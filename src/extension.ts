@@ -57,14 +57,18 @@ const pasteAndIndent = () => {
 		editor.edit((editBuilder: vscode.TextEditorEdit) => {
 			editBuilder.replace(selectionToIndent, linesToIndent.join('\n'));
 			if (linesToIndent.length > 1 && config.get('selectAfter', false)) {
-				editor.selection = new vscode.Selection(start.line + 1, 0, end.line, linesToIndent[linesToIndent.length - 1].length);
+				//editor.selection = new vscode.Selection(start.line + 1, 0, end.line, linesToIndent[linesToIndent.length - 1].length);
+				//>[2025-02-15T14:42:07.345+08:00_W7-6]
+				editor.selection = new vscode.Selection(start.line + 0, 0, end.line, linesToIndent[linesToIndent.length - 1].length);
 			}
 		});
 	});
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	context.subscriptions.push(vscode.commands.registerCommand('pasteAndIndent.action', pasteAndIndent));
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pasteAndIndent.action', pasteAndIndent)
+	);
 }
 
 export function deactivate() {
